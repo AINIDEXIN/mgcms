@@ -1,0 +1,27 @@
+{
+  "name": "nodemy",
+  "version": "1.0.0",
+  "description": "mgcms",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "server": "nodemon app.js"
+  },
+  "author": "我爱藏獒",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser-xml": "^1.1.0",
+    "casbin": "^3.0.4",
+    "casbin-express-authz": "^2.0.0",
+    "express": "^4.17.1",
+    "formidable": "^1.2.1",
+    "gravatar": "^1.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.6.1",
+    "multer": "^1.4.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "ueditor-backend": "^1.0.15"
+  }
+}

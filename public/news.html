@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
+    <title>动态</title>
+  <link rel="stylesheet" href="../res/layui/css/layui.css">
+  <link rel="stylesheet" href="../res/static/css/index.css">
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <style>
+    .layui-nav :hover .layui-nav-child {
+      display: block;
+    }
+
+    .menunav {
+      width: calc(100% - 200px);
+      position: absolute;
+      right: 0px;
+      top: 20px;
+      padding-left: 140px;
+      box-sizing: border-box;
+    }
+
+    .menunav>li {
+      float: left;
+      position: relative;
+      height: 48px;
+      line-height: 48px;
+      font-size: 21px;
+    }
+
+    .menunav>li a {
+      padding: 0px 40px;
+    }
+
+    .menunav>li:hover .yjcdhover {
+      color: #2db5a3;
+    }
+
+    .menunav>li:hover .menu_ul {
+      display: block;
+    }
+
+    .menu_ul {
+      width: 135px;
+      top: 50px;
+      display: none;
+    }
+
+    .ceshipo {
+      position: absolute;
+      top: 48px;
+      padding-top: 8px;
+    }
+
+    .menu_ul>li {
+      line-height: 40px;
+      font-size: 18px;
+      height: 40px;
+      float: none;
+      background: #fff;
+      margin: 1px 0px;
+    }
+
+    .menu_ul>li:hover .ejcdhover {
+      color: #a1d8cb;
+    }
+
+    .ceshipop:nth-child(3) .action_ys {
+      display: block;
+    }
+
+    .action_ys {
+      width: 50px;
+      height: 3px;
+      background: #2db5a3;
+      position: absolute;
+      left: 50%;
+      margin-left: -25px;
+      bottom: -12px;
+      display: none;
+      z-index: 999;
+    }
+    .nav-logo img{
+      width: 200px;
+      height: 40px;
+    }
+    .block{
+    	text-align: right;
+    }
+    .el-pagination{
+    	white-space: normal;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- nav部分 -->
+  <div id="app" v-cloak>
+    <div class="nav index">
+      <div class="layui-container">
+        <!-- 公司logo -->
+        <div class="nav-logo">
+          <a href="index.html">
+            <img :src="logosrc" alt="芒果网络">
+          </a>
+        </div>
+
+        <ul class="menunav">
+          <li v-for="item in navdata" :key="item" class="ceshipop">
+            <a :href="item.hyperlinks" class="yjcdhover">{{item.name}}</a>
+            <div class="ceshipo">
+              <ul class="menu_ul" v-for="items in item.secondarydata" :key="items" v-if="items.lower">
+                <li><a :href="items.lowerhyperlinks" class="ejcdhover">{{items.lower}}</a></li>
+              </ul>
+            </div>
+            <div class="action_ys"></div>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+    <!-- banner部分 -->
+    <div class="banner news">
+      <div class="title">
+        <p>实时新闻</p>
+        <p class="en">Real-time News</p>
+      </div>
+    </div>
+    <!-- main -->
+    <div class="main-news">
+      <div class="layui-container">
+        <div class="layui-row layui-col-space20">
+          <div class="layui-col-lg6 content" v-for="item in tableData" :key="item">
+            <div>
+              <div class="news-img"><a :href="'newsDetail.html?id='+item._id"><img :src="item.thumbnailimg"></a></div>
+              <div class="news-panel">
+                <strong><a :href="'newsDetail.html?id='+item._id">{{item.title}}</a></strong>
+                <p class="detail"><span>{{item.content}}</span></p>
+                <p class="read-push">发布时间：<span>{{item.releasedate}}</span></p>
+              </div>
+             
+            </div>
+          </div>
+        </div>
+        <div class="block">
+        	<el-pagination
+		        @size-change="handleSizeChange"
+		        @current-change="handleCurrentChange"
+		        :current-page.sync="paginations.page_index"
+		        :page-sizes="paginations.page_sizes"
+		        :page-size="paginations.page_size"
+		        :layout="paginations.layout"
+		        :total="paginations.total"
+    		>
+        	</el-pagination>
+        </div>
+      </div>
+    </div>
+    <!-- footer部分 -->
+    <div class="footer">
+        <div class="layui-container">
+          <p class="footer-web">
+            <a v-for="item in bootomInfo" :key="item" :href="item.hyperlink">{{item.name}}</a>
+          </p>
+          <div class="layui-row footer-contact">
+            <div class="layui-col-sm2 layui-col-lg1"><img :src="getbotInfos.erweima" width="86px" height="86px"></div>
+            <div class="layui-col-sm10 layui-col-lg11">
+              <div class="layui-row">
+                <div class="layui-col-sm6 layui-col-md8 layui-col-lg9">
+                  <p class="contact-top">
+                    <i class="layui-icon layui-icon-cellphone"></i>&nbsp;{{getbotInfos.telephone}}</p>
+                  <p class="contact-bottom"><i class="layui-icon layui-icon-home"></i><span>&nbsp;{{getbotInfos.weburl}}</span>
+                  </p>
+                </div>
+                <div class="layui-col-sm6 layui-col-md4 layui-col-lg3">
+                  <p class="contact-top"><span class="right">{{getbotInfos.address}}</span></p>
+                  <p class="contact-bottom"><span class="right">{{getbotInfos.icp}}</span>
+  
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <script src="../res/static/js/vue.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="../res/layui/layui.js"></script>
+  <script>
+  	new Vue({
+  		el:"#app",
+  		data:{
+  			tableData:[],
+  			alltableData:[],
+  			navdata: [],
+		    bootomInfo: [],
+		    getbotInfos: {},
+		    logosrc:"",
+		    newsInfos:[],
+		    paginations: {
+		        page_index: 1, // 当前位于哪页
+		        total: 0, // 总数
+		        page_size: 5, // 1页显示多少条
+		        page_sizes: [5, 10, 15, 20], //每页显示多少条
+		        layout: "total, sizes, prev, pager, next, jumper" // 翻页属性
+    		}
+  		},
+  		mounted(){
+  			this.logoImg();
+	        this.navgitab();
+	        this.getbasisBootom();
+	        this.getbotInfo();
+	        this.newsInfo();
+  		},
+  		methods:{
+  		 logoImg() {
+		     axios.get('https://www.mangguo.info/api/logoimg')
+		       .then(info => {
+		        const logoImg = info.data.imglogo;
+		        this.logosrc = logoImg;
+		     })
+         },
+        navgitab() {
+          axios.get('https://www.mangguo.info/api/navigat')
+            .then(info => {
+              //console.log(info.data[0].defaults);
+              var navtab = info.data;
+              //console.log(navtab);
+              this.navdata = navtab;
+              //console.log(this.navdata);
+            })
+        },
+        getbasisBootom() {
+          axios.get('https://www.mangguo.info/api/basisbottom')
+            .then(info => {
+              //console.log(info.data)
+              this.bootomInfo = info.data;
+            })
+        },
+        getbotInfo() {
+          axios.get('https://www.mangguo.info/api/btominfo')
+            .then(info => {
+              //console.log(info.data)
+              this.getbotInfos = info.data;
+            })
+        },
+        newsInfo(){
+	        axios.get('https://www.mangguo.info/api/news')
+	          .then(info =>{
+	            this.alltableData = info.data;
+	            this.setPaginations();
+	        })
+        },
+        handleSizeChange(page_size){
+        	this.paginations.page_index = 1;
+    		this.paginations.page_size = page_size;
+		    this.tableData = this.alltableData.filter((item, index) => {
+		        return index < page_size;
+		    });
+        },
+        handleCurrentChange(page){
+        	//获取当前页
+	      let index = this.paginations.page_size * (page - 1);
+	      //数据总数
+	      let nums = this.paginations.page_size * page;
+	      //容器
+	      let tables = [];
+	      for (let i = index; i < nums; i++) {
+	        if(this.alltableData[i]){
+	          tables.push(this.alltableData[i]);
+	        }
+	        this.tableData = tables;
+	      }
+        },
+        setPaginations() {
+	      this.paginations.total = this.alltableData.length;
+	      this.paginations.page_index = 1; //当前第几页
+	      this.paginations.page_size = 5; //每页显示条目个数
+	      this.tableData = this.alltableData.filter((item, index) => {
+	        return index < this.paginations.page_size;
+	      });
+    	}
+  		}
+  	})
+  </script>
+</body>
+
+</html>
