@@ -10,7 +10,7 @@
   "author": "我爱藏獒",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "body-parser-xml": "^1.1.0",
     "casbin": "^3.0.4",
     "casbin-express-authz": "^2.0.0",
